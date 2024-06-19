@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Publicación</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../styles3.css">
+    <link rel="stylesheet" href="../perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="dropdown1">
+            <button class="button1">Menú</button>
+            <div class="dropdown-content1">
+                <a href="../interface/crear_post.html">NUEVO</a>
+                <a href="../interface/listas.html">LISTAS</a>
+                <a href="../interface/lectura.html">LECTURA</a>
+                <a href="../index.html">SALIR</a>
+            </div>
+        </div>
+        <h1>My Blog AsH</h1>
+        <a href="../queries/perfil_usuario.php" class="button1">Usuario</a>
+    </header>
+    <main>
+        <form id="edit-post-form" method="post" action="../inserts/editar_post.php"
+            onsubmit="return handleSubmit(event)">
+            <input type="hidden" name="post_id" id="post_id">
+
+            <div class="input-container">
+                <label for="titulo">Ingrese el título:</label>
+                <input type="text" id="titulo" name="titulo" class="input-title" placeholder="Escribe aquí tu título..."
+                    required>
+            </div>
+
+            <div class="editor-container">
+                <div class="editor-section">
+                    <div class="toolbar">
+                        <button class="button" type="button" onclick="execCommand('bold')"><i
+                                class="fas fa-bold"></i></button>
+                        <button class="button" type="button" onclick="execCommand('italic')"><i
+                                class="fas fa-italic"></i></button>
+                        <button class="button" type="button" onclick="execCommand('underline')"><i
+                                class="fas fa-underline"></i></button>
+                        <button class="button" type="button" onclick="execCommand('strikeThrough')"><i
+                                class="fas fa-strikethrough"></i></button>
+                        <button class="button" type="button" onclick="execCommand('insertUnorderedList')"><i
+                                class="fas fa-list"></i></button>
+                        <button class="button" type="button" onclick="execCommand('insertOrderedList')"><i
+                                class="fas fa-list-ol"></i></button>
+                        <select id="font-dropdown">
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Verdana">Verdana</option>
+                        </select>
+                        <button class="button" type="button" onclick="changeFontSize('increase')"><i
+                                class="fas fa-search-plus"></i></button>
+                        <button class="button" type="button" onclick="changeFontSize('decrease')"><i
+                                class="fas fa-search-minus"></i></button>
+                        <button class="button" type="button" onclick="execCommand('justifyLeft')"><i
+                                class="fas fa-align-left"></i></button>
+                        <button class="button" type="button" onclick="execCommand('justifyCenter')"><i
+                                class="fas fa-align-center"></i></button>
+                        <button class="button" type="button" onclick="execCommand('justifyRight')"><i
+                                class="fas fa-align-right"></i></button>
+                        <button class="button" type="button" onclick="execCommand('justifyFull')"><i
+                                class="fas fa-align-justify"></i></button>
+                        <button class="button" type="button" id="highlight-button"><i
+                                class="fas fa-highlighter"></i></button>
+                        <select class="button" id="emojiDropdown" onchange="insertEmoji(this.value)">
+                            <option value="">😀 Emoji</option>
+                            <option value="😀">😀</option>
+                            <option value="😁">😁</option>
+                            <option value="😂">😂</option>
+                            <option value="🤣">🤣</option>
+                            <option value="😃">😃</option>
+                            <option value="😄">😄</option>
+                            <option value="😅">😅</option>
+                            <option value="😆">😆</option>
+                            <option value="😉">😉</option>
+                            <option value="😊">😊</option>
+                            <option value="😋">😋</option>
+                            <option value="😎">😎</option>
+                        </select>
+                    </div>
+                    <div class="input-container">
+                        <input type="hidden" name="contenido" id="contenidoInput">
+                        <div id="editor" contenteditable="true" class="input-content"
+                            data-placeholder="Escribe o edita tu texto aquí...">
+                            <p class="default-text">Escribe o edita tu texto aquí...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="sidebar">
+                    <div class="toolbar">
+                        <div class="toolbar-buttons">
+                            <!-- Botones de formato de texto -->
+                        </div>
+                        <div class="fecha-contenedor">
+                            <span>Fecha:</span>
+                            <span id="fechaLabel">11/06/2024</span>
+                        </div>
+                    </div>
+                    <div class="input-container">
+                        <label for="etiqueta">Etiqueta:</label>
+                        <textarea id="etiqueta" name="etiqueta" class="input-content"
+                            placeholder="Escribe aquí tu etiqueta..." required></textarea>
+                    </div>
+                    <div class="input-container">
+                        <label for="categoria">Ingrese la categoría:</label>
+                        <input type="text" id="categoria" name="categoria" class="input-title"
+                            placeholder="Escribe aquí la categoría..." required>
+                    </div>
+                    <div class="input-container">
+                        <label for="visibilidad">Visibilidad:</label>
+                        <select id="visibilidad" name="visibilidad" class="input-title" required>
+                            <option value="publico">Público</option>
+                            <option value="privado">Privado</option>
+                        </select>
+                    </div>
+                    <button id="publica" class="button" type="submit">Guardar Cambios <i
+                            class="fas fa-save"></i></button>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Obtener los parámetros de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('id');
+            const titulo = urlParams.get('titulo');
+            const contenido = urlParams.get('contenido');
+            const etiqueta = urlParams.get('etiqueta');
+            const categoria = urlParams.get('categoria');
+            const visibilidad = urlParams.get('visibilidad');
+
+            // Rellenar los campos del formulario solo si los valores no son null o undefined
+            if (titulo) {
+                document.getElementById('titulo').value = decodeURIComponent(titulo);
+            }
+            if (contenido) {
+                document.getElementById('editor').innerHTML = decodeURIComponent(contenido);
+            }
+            if (etiqueta) {
+                document.getElementById('etiqueta').value = decodeURIComponent(etiqueta);
+            }
+            if (categoria) {
+                document.getElementById('categoria').value = decodeURIComponent(categoria);
+            }
+            if (visibilidad) {
+                document.getElementById('visibilidad').value = decodeURIComponent(visibilidad);
+            }
+
+            // Asignar el valor de post_id
+            if (postId) {
+                document.getElementById('post_id').value = postId;
+            }
+        });
+
+        // Función para ejecutar comandos de edición
+        function execCommand(command) {
+            document.execCommand(command, false, null);
+        }
+
+        // Función para cambiar el tamaño de la fuente
+        function changeFontSize(action) {
+            let fontSize = window.getComputedStyle(document.getElementById('editor')).fontSize;
+            fontSize = parseFloat(fontSize);
+            if (action === 'increase') {
+                fontSize += 1;
+            } else if (action === 'decrease') {
+                fontSize -= 1;
+            }
+            document.getElementById('editor').style.fontSize = fontSize + 'px';
+        }
+
+        // Función para insertar emojis
+        function insertEmoji(emoji) {
+            if (emoji) {
+                document.execCommand('insertText', false, emoji);
+            }
+        }
+
+        // Manejar el envío del formulario para actualizar el post
+        function handleSubmit(event) {
+            event.preventDefault();
+
+            const postId = document.getElementById('post_id').value;
+            const updatedTitulo = document.getElementById('titulo').value;
+            const updatedContenido = document.getElementById('editor').innerHTML;
+            const updatedEtiqueta = document.getElementById('etiqueta').value;
+            const updatedCategoria = document.getElementById('categoria').value;
+            const updatedVisibilidad = document.getElementById('visibilidad').value;
+
+            // Actualizar el campo oculto con el contenido editado
+            document.getElementById('contenidoInput').value = updatedContenido;
+
+            // Ejecutar función para actualizar el post
+            updatePost(postId, updatedTitulo, updatedContenido, updatedEtiqueta, updatedCategoria, updatedVisibilidad);
+        }
+
+        // Función para enviar la solicitud de actualización del post
+        async function updatePost(id, titulo, contenido, etiqueta, categoria, visibilidad) {
+            try {
+                const response = await fetch('../inserts/editar_post.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ id, titulo, contenido, etiqueta, categoria, visibilidad })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en la solicitud HTTP: ' + response.statusText);
+                }
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert('Post actualizado exitosamente');
+                    window.location.href = '../interface/listas.html'; // Redirigir a listas.html
+                } else {
+                    alert('Error al actualizar el post: ' + (result.error || 'No se recibió un mensaje de error válido'));
+                }
+            } catch (error) {
+                console.error('Error updating post:', error);
+                alert('Error actualizando el post. Verifica la consola para más detalles.');
+            }
+        }
+    </script>
+</body>
+
+</html>

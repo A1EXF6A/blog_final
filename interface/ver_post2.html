@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Post</title>
+    <link rel="stylesheet" href="../ver_post.css">
+</head>
+
+<body>
+    <header>
+        <div class="dropdown1">
+            <button class="button1">Menú</button>
+            <div class="dropdown-content1">
+                <a href="../interface/lectura_invitado.html">LECTURA</a>
+                <a href="../queries/logout.php">SALIR</a>
+            </div>
+        </div>
+        <h1>My Blog AsH</h1>
+        <a href="../interface/lectura_invitado.html" class="profile-button">Usuario</a>
+    </header>
+    <main>
+        <section id="post-content">
+            <h2 id="post-title">TITULO</h2>
+            <div id="post-body">CONTENIDO QUE TIENE EL POST</div>
+            <div id="post-info">
+                <div id="post-author">PUBLICADO POR:</div>
+                <div id="post-category">CATEGORIAS:</div>
+                <div id="post-fecha">PUBLICADO EL:</div>
+            </div>
+            <hr>
+            <div id="comment-section">
+                <h2>COMENTARIOS</h2>
+                <div id="comments-list">
+                    <!-- Aquí se mostrarán los comentarios -->
+                </div>
+                <p id="no-comments-msg" style="display: none;">No hay comentarios aún.</p>
+            </div>
+        </section>
+    </main>
+    <script>
+        async function fetchComments(postId) {
+            try {
+                const response = await fetch(`../queries/comentarios.php?id=${postId}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching comments:', error);
+                return [];
+            }
+        }
+
+        async function fetchPost(postId) {
+            try {
+                const response = await fetch(`../queries/mostrarInvitados.php?id=${postId}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const post = await response.json();
+                if (post.error) {
+                    console.error('Database error:', post.error);
+                    return;
+                }
+                document.getElementById('post-title').textContent = post.titulo;
+                document.getElementById('post-body').innerHTML = post.contenido; // Cambiado para renderizar HTML
+                document.getElementById('post-author').textContent = `PUBLICADO POR: ${post.usuario}`;
+                document.getElementById('post-category').textContent = `CATEGORIAS: ${post.categoria}`;
+                document.getElementById('post-fecha').textContent = `PUBLICADO EL: ${post.fecha}`;
+
+                const comments = await fetchComments(postId);
+                const commentsList = document.getElementById('comments-list');
+                commentsList.innerHTML = '';
+                if (comments.length > 0) {
+                    comments.forEach(comment => {
+                        const commentElement = document.createElement('div');
+                        commentElement.classList.add('comment');
+                        commentElement.innerHTML = `
+                            <p><strong>${comment.usuario}</strong>: ${comment.comentario}</p>
+                            <span>${comment.fecha}</span>
+                        `;
+                        commentsList.appendChild(commentElement);
+                    });
+                } else {
+                    document.getElementById('no-comments-msg').style.display = 'block';
+                }
+            } catch (error) {
+                console.error("Error fetching post:", error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('id');
+            if (postId) {
+                fetchPost(postId);
+            } else {
+                console.error("No post ID found in the URL");
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,120 @@
+/* Estilos para el cuerpo del documento */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+/* Estilos para el encabezado h2 */
+h2 {
+    color: #333;
+    text-align: center;
+    margin-top: 50px;
+}
+
+/* Estilos para los párrafos */
+p {
+    color: #666;
+    font-size: 16px;
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+/* Estilos para el botón */
+.button1 {
+    background-color: #4e6398;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+/* Estilos para el botón cuando se pasa el ratón por encima */
+.button1:hover {
+    background-color: #2c5076;
+}
+
+/* Estilos para el dropdown */
+.dropdown1 {
+    position: relative;
+    display: inline-block;
+}
+
+/* Estilos para el contenido del dropdown */
+.dropdown-content1 {
+    display: none;
+    position: absolute;
+    background-color: #ede3e388;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 8px;
+}
+
+/* Estilos para los enlaces dentro del dropdown */
+.dropdown-content1 a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Estilos para los enlaces dentro del dropdown cuando se pasa el ratón por encima */
+.dropdown-content1 a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Estilos para mostrar el dropdown al pasar el ratón por encima */
+.dropdown1:hover .dropdown-content1 {
+    display: block;
+}
+
+/* Estilos para el dropdown button */
+.dropbtn {
+    background-color: transparent;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+/* Estilos para el dropdown button cuando se pasa el ratón por encima */
+.dropbtn:hover {
+    background-color: #45a049;
+}
+
+/* Media Queries para hacer el diseño responsive */
+@media (max-width: 767px) {
+    h2 {
+        font-size: 24px;
+        margin-top: 30px;
+    }
+
+    p {
+        font-size: 14px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .button1, .dropbtn {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    .dropdown-content1 {
+        min-width: 120px;
+    }
+
+    .dropdown-content1 a {
+        padding: 10px 14px;
+    }
+}

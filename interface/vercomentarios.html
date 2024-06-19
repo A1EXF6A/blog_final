@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comentarios del Post</title>
+    <link rel="stylesheet" href="../ver_comentario.css">
+    <link rel="stylesheet" href="../perfil.css">
+</head>
+
+<body>
+    <header>
+        <div class="dropdown1">
+            <button class="button1">Menú</button>
+            <div class="dropdown-content1">
+                <a href="../interface/crear_post.html">NUEVO</a>
+                <a href="../interface/listas.html">LISTAS</a>
+                <a href="../interface/lectura.html">LECTURA</a>
+                <a href="../queries/logout.php">SALIR</a>
+            </div>
+        </div>
+        <h1>My Blog AsH</h1>
+        <a href="../queries/perfil_usuario.php" class="profile-button">Perfil</a>
+    </header>
+    <main>
+        <section id="post-content">
+            <h2 id="post-title">TITULO</h2>
+            <p id="post-commented-by" class="commented-by"></p> <!-- Nuevo elemento para mostrar "Comentado por" -->
+            <div id="post-body">CONTENIDO QUE TIENE EL POST</div>
+            <hr>
+            <section id="comment-list">
+                <div id="loading-indicator">Cargando comentarios...</div>
+                <div id="comments-container"></div>
+            </section>
+        </section>
+    </main>
+    <script>
+        let comments = [];
+
+        async function fetchPostAndComments(postId) {
+            try {
+                document.getElementById('loading-indicator').style.display = 'block';
+                const response = await fetch(`../queries/mostrar_comentarios.php?postId=${postId}`);
+                if (!response.ok) {
+                    throw new Error('La respuesta de la red no fue correcta');
+                }
+                const data = await response.json();
+                console.log(data);  // Verifica los datos recibidos desde el servidor
+
+                renderPostAndComments(data.post, data.comments);
+                document.getElementById('loading-indicator').style.display = 'none';
+            } catch (error) {
+                console.error("Error al obtener el post y los comentarios:", error);
+                document.getElementById('loading-indicator').style.display = 'none';
+            }
+        }
+
+        function renderPostAndComments(post, comments) {
+            // Mostrar información del post
+            document.getElementById('post-title').textContent = post.titulo_post;
+            document.getElementById('post-commented-by').textContent = `COMENTADO POR: `;
+            document.getElementById('post-body').textContent = post.contenido_post;
+
+            // Mostrar comentarios
+            const commentsContainer = document.getElementById('comments-container');
+            commentsContainer.innerHTML = '';  // Limpiar el contenedor antes de agregar los comentarios
+
+            comments.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.classList.add('comment-item');
+                commentElement.innerHTML = `
+                    <h3 class="comment-user">${comment.nombre_usuario}</h3>
+                    <p class="comment-content">${comment.contenido}</p>
+                    <p class="comment-date">${formatDate(comment.fecha)}</p>
+                `;
+                commentsContainer.appendChild(commentElement);
+            });
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
+        }
+
+        // Función para obtener el postId de la URL y luego cargar los comentarios y el post
+        function loadPostAndComments() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('id');
+            if (postId) {
+                fetchPostAndComments(postId);
+            } else {
+                console.error('No se encontró el postId en la URL');
+            }
+        }
+
+        // Llamar a loadPostAndComments() cuando se cargue el DOM
+        document.addEventListener('DOMContentLoaded', loadPostAndComments);
+    </script>
+</body>
+
+</html>

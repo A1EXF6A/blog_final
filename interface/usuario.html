@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil del Usuario</title>
+    <meta name="viewport"
+        content="width=device-width, user-scalable=yes, initial-scale=1.0, maximum-scale=3.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+    <link rel="stylesheet" href="../estilos_login.css">
+    <link rel="stylesheet" href="../perfil.css">
+    <script src="../controllers/ValidarEntrada.js" defer></script>
+    <script src="../controllers/Errores.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="dropdown1">
+            <button class="button1">Menú</button>
+            <div class="dropdown-content1">
+                <a href="../interface/crear_post.html">NUEVO</a>
+                <a href="../interface/listas.html">LISTAS</a>
+                <a href="../interface/listas.html">LECTURA</a>
+                <a href="../queries/logout.php">SALIR</a>
+            </div>
+        </div>
+
+    </header>
+    <form class="formulario" id="userForm" action="../inserts/actualizar_perfil.php" method="POST">
+        <h1>Perfil del Usuario</h1>
+        <div class="contenedor">
+            <div class="input-contenedor">
+                <i class="fas fa-user icon"></i>
+                <input name="nombre" id="nombre" type="text" value="<?php echo $usuario['nombre_completo']; ?>"
+                    readonly>
+                <div id="nombrecompleto-error" class="error-message"></div>
+            </div>
+            <div class="input-contenedor">
+                <i class="fas fa-envelope icon"></i>
+                <input name="correo" type="text" id="correo" value="<?php echo $usuario['correo_electronico']; ?>"
+                    readonly>
+                <div id="email-error" class="error-message"></div>
+            </div>
+            <div class="input-contenedor">
+                <i class="fas fa-user icon"></i>
+                <input name="usuario" type="text" id="usuario" value="<?php echo $usuario['usuario']; ?>" readonly>
+                <div id="usuario-error" class="error-message"></div>
+            </div>
+            <div class="input-contenedor">
+                <i class="fas fa-key icon"></i>
+                <input name="contraseña" type="password" id="contraseña" value="<?php echo $usuario['contraseña']; ?>"
+                    readonly>
+                <i class="fas fa-eye" id="togglePassword"></i>
+                <div id="password-error" class="error-message"></div>
+            </div>
+            <input type="hidden" name="contraseña_actual" id="contraseña_actual"
+                value="<?php echo $usuario['contraseña']; ?>">
+            <div class="intereses">
+                <h2>Selecciona tus intereses</h2>
+                <div class="botones-intereses">
+                    <input type="checkbox" id="musica" name="intereses[]" class="interes" value="Musica" <?php echo
+                        in_array('Musica', explode(',', $usuario['intereses'])) ? 'checked' : '' ; ?> disabled>
+                    <label for="musica">Música</label>
+                    <input type="checkbox" id="comida" name="intereses[]" class="interes" value="Comida" <?php echo
+                        in_array('Comida', explode(',', $usuario['intereses'])) ? 'checked' : '' ; ?> disabled>
+                    <label for="comida">Comida</label>
+                    <input type="checkbox" id="fitness" name="intereses[]" class="interes" value="Fitness" <?php echo
+                        in_array('Fitness', explode(',', $usuario['intereses'])) ? 'checked' : '' ; ?> disabled>
+                    <label for="fitness">Fitness</label>
+                    <input type="checkbox" id="estudio" name="intereses[]" class="interes" value="Estudio" <?php echo
+                        in_array('Estudio', explode(',', $usuario['intereses'])) ? 'checked' : '' ; ?> disabled>
+                    <label for="estudio">Estudio</label>
+                    <input type="checkbox" id="deportes" name="intereses[]" class="interes" value="Deportes" <?php echo
+                        in_array('Deportes', explode(',', $usuario['intereses'])) ? 'checked' : '' ; ?> disabled>
+                    <label for="deportes">Deportes</label>
+                    <input type="checkbox" id="programacion" name="intereses[]" class="interes" value="Programacion"
+                        <?php echo in_array('Programacion', explode(',', $usuario['intereses'])) ? 'checked' : '' ; ?>
+                    disabled>
+                    <label for="programacion">Programación</label>
+                    <input type="checkbox" id="oratoria" name="intereses[]" class="interes" value="Oratoria" <?php echo
+                        in_array('Oratoria', explode(',', $usuario['intereses'])) ? 'checked' : '' ; ?> disabled>
+                    <label for="oratoria">Oratoria</label>
+                </div>
+                <div id="intereses-error" class="error-message"></div>
+            </div>
+            <input type="hidden" name="id" value="<?php echo $usuario['id']; ?>">
+            <button type="button" class="button" id="editButton">Editar</button>
+            <button type="submit" class="button" id="saveButton" style="display: none;">Guardar cambios</button>
+            <button type="button" class="button" id="cancelButton" style="display: none;">Cancelar</button>
+        </div>
+    </form>
+
+
+    <script>
+        document.getElementById('editButton').addEventListener('click', function () {
+            var inputs = document.querySelectorAll('#userForm input[type="text"], #userForm input[type="email"], #userForm input[type="password"], #userForm input[type="checkbox"]');
+            inputs.forEach(function (input) {
+                input.removeAttribute('readonly');
+                input.removeAttribute('disabled');
+            });
+            document.getElementById('saveButton').style.display = 'inline-block';
+            document.getElementById('cancelButton').style.display = 'inline-block';
+            this.style.display = 'none';
+        });
+
+        document.getElementById('cancelButton').addEventListener('click', function () {
+            var inputs = document.querySelectorAll('#userForm input[type="text"], #userForm input[type="email"], #userForm input[type="password"], #userForm input[type="checkbox"]');
+            inputs.forEach(function (input) {
+                input.setAttribute('readonly', 'readonly');
+                input.setAttribute('disabled', 'disabled');
+            });
+            document.getElementById('editButton').style.display = 'inline-block';
+            document.getElementById('saveButton').style.display = 'none';
+            this.style.display = 'none';
+        });
+    </script>
+    <script>
+        var togglePassword = document.getElementById('togglePassword');
+        var passwordInput = document.getElementById('contraseña');
+
+        togglePassword.addEventListener('click', function () {
+            var type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
+
+</body>
+
+</html>

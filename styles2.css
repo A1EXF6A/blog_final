@@ -1,0 +1,222 @@
+/* Estilos generales */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('fondo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+}
+
+/* Estilos para el encabezado */
+header {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(10px);
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav li {
+    margin-right: 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.user-info {
+    background-color: rgba(139, 0, 139, 0.8);
+    padding: 5px 15px;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+}
+
+/* Estilos para el menú desplegable */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.6);
+    min-width: 160px;
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.dropdown-content a {
+    color: white;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: color 0.3s;
+}
+
+.dropdown-content a:hover {
+    color: rgb(219, 60, 60);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: rgb(170, 11, 170);
+}
+
+/* Estilos para la vista del post */
+#post-view {
+    width: 80%;
+    max-width: 800px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    margin: 40px auto;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#post-title {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.post-meta {
+    display: flex;
+    justify-content: space-between;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.comments {
+    margin-top: 20px;
+}
+
+.comment-item {
+    background-color: rgba(51, 51, 51, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    backdrop-filter: blur(5px);
+}
+
+.comment-form {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.comment-form textarea,
+.comment-form input[type="text"] {
+    flex-grow: 1;
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    margin-right: 10px;
+    resize: none;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #000;
+}
+
+.send-btn {
+    background-color: rgba(139, 0, 139, 0.8);
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.send-btn:hover {
+    background-color: rgb(170, 11, 170);
+}
+
+.user-message {
+    margin-top: 10px;
+    color: #ff6f61;
+}
+
+.button {
+    background-image: url('menus.png');
+    background-repeat: no-repeat;
+    height: 40px;
+    width: 40px;
+    background-size: 100%;
+    background-position: center;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+    background-color: transparent;
+}
+
+/* Media Queries para hacer el diseño responsive */
+@media (max-width: 767px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav ul {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    nav li {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .dropdown-content {
+        min-width: 120px;
+    }
+
+    .dropdown-content a {
+        padding: 10px 14px;
+    }
+
+    #post-view {
+        width: 90%;
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    #post-title {
+        font-size: 1.5em;
+    }
+
+    .post-meta {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .comment-form {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .comment-form textarea,
+    .comment-form input[type="text"] {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .send-btn {
+        width: 100%;
+        text-align: center;
+    }
+}

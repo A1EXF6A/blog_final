@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Publicación</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../styles3.css">
+    <link rel="stylesheet" href="../perfil.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"> -->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> -->
+
+</head>
+
+<body>
+    <header>
+        <div class="dropdown1">
+            <button class="button1">Menú</button>
+            <div class="dropdown-content1">
+                <a href="../interface/crear_post.html">NUEVO</a>
+                <a href="../interface/listas.html">LISTAS</a>
+                <a href="../interface/lectura.html">LECTURA</a>
+                <a href="../queries/logout.php">SALIR</a>
+            </div>
+        </div>
+        <h1>My Blog AsH</h1>
+        <a href="../queries/perfil_usuario.php" class="button1">Usuario</a>
+    </header>
+    <form method="post" action="../inserts/guardar_post.php" onsubmit="return validateForm()">
+        <div class="input-container">
+            <label for="titulo">Ingrese el título:</label>
+            <input type="text" id="titulo" name="titulo" class="input-title" placeholder="Escribe aquí tu título...">
+        </div>
+
+        <div class="editor-container">
+            <div class="editor-section">
+                <div class="toolbar">
+                    <!-- Botones de la barra de herramientas -->
+                    <button class="button" type="button" onclick="execCommand('bold')"><i
+                            class="fas fa-bold"></i></button>
+                    <button class="button" type="button" onclick="execCommand('italic')"><i
+                            class="fas fa-italic"></i></button>
+                    <button class="button" type="button" onclick="execCommand('underline')"><i
+                            class="fas fa-underline"></i></button>
+                    <button class="button" type="button" onclick="execCommand('strikeThrough')"><i
+                            class="fas fa-strikethrough"></i></button>
+                    <button class="button" type="button" onclick="execCommand('insertUnorderedList')"><i
+                            class="fas fa-list"></i></button>
+                    <button class="button" type="button" onclick="execCommand('insertOrderedList')"><i
+                            class="fas fa-list-ol"></i></button>
+                    <select id="font-dropdown">
+                        <option value="Arial">Arial</option>
+                        <option value="Times New Roman">Times New Roman</option>
+                        <option value="Verdana">Verdana</option>
+                        <option value="Calibri">Calibri</option>
+                        <option value="Cambria">Cambria</option>
+                        <option value="Georgia">Georgia</option>
+                        <option value="Tahoma">Tahoma</option>
+                        <option value="Courier New">Courier New</option>
+                    </select>
+                    <button class="button" type="button" onclick="changeFontSize('increase')"><i
+                            class="fas fa-search-plus"></i></button>
+                    <button class="button" type="button" onclick="changeFontSize('decrease')"><i
+                            class="fas fa-search-minus"></i></button>
+                    <button class="button" type="button" onclick="execCommand('justifyLeft')"><i
+                            class="fas fa-align-left"></i></button>
+                    <button class="button" type="button" onclick="execCommand('justifyCenter')"><i
+                            class="fas fa-align-center"></i></button>
+                    <button class="button" type="button" onclick="execCommand('justifyRight')"><i
+                            class="fas fa-align-right"></i></button>
+                    <button class="button" type="button" onclick="execCommand('justifyFull')"><i
+                            class="fas fa-align-justify"></i></button>
+                    <button class="button" type="button" id="highlight-button" onclick="resaltarTexto()"><i
+                            class="fas fa-highlighter"></i></button>
+                    <select class="button" id="emojiDropdown" onchange="insertEmoji(this.value)">
+                        <option value="">😀 Emoji</option>
+                        <option value="😀">😀</option>
+                        <option value="😁">😁</option>
+                        <option value="😂">😂</option>
+                        <option value="🤣">🤣</option>
+                        <option value="😃">😃</option>
+                        <option value="😄">😄</option>
+                        <option value="😅">😅</option>
+                        <option value="😆">😆</option>
+                        <option value="😉">😉</option>
+                        <option value="😊">😊</option>
+                        <option value="😋">😋</option>
+                        <option value="😎">😎</option>
+                    </select>
+                </div>
+
+                <div class="input-container">
+                    <input type="hidden" name="contenido" id="contenidoInput">
+                    <div id="editor" contenteditable="true" class="input-content"
+                        data-placeholder="Escribe o edita tu texto aquí...">
+                        <p class="default-text">Escribe o edita tu texto aquí...</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="sidebar">
+                <div class="toolbar">
+                    <div class="toolbar-buttons">
+                        <!-- Botones de formato de texto -->
+                    </div>
+                    <div class="fecha-contenedor">
+                        <span>Fecha:</span>
+                        <span id="fechaLabel"></span>
+                    </div>
+                </div>
+                <div class="input-container">
+                    <label for="etiqueta">Etiqueta:</label>
+                    <textarea id="etiqueta" name="etiqueta" class="input-content"
+                        placeholder="Escribe aquí tu etiqueta..."></textarea>
+                </div>
+                <div class="input-container">
+                    <label for="categoria">Ingrese la categoría:</label>
+                    <input type="text" id="categoria" name="categoria" class="input-title"
+                        placeholder="Escribe aquí la categoría...">
+                </div>
+                <div class="input-container">
+                    <label for="visibilidad">Visibilidad:</label>
+                    <select id="visibilidad" name="visibilidad" class="input-title">
+                        <option value="publico">Público</option>
+                        <option value="privado">Privado</option>
+                    </select>
+                </div>
+
+                <button id="publica" class="button" type="submit">Publicar <i class="fas fa-upload"></i></button>
+            </div>
+        </div>
+    </form>
+
+    <script>
+        function updateContenidoInput() {
+            document.getElementById('contenidoInput').value = document.getElementById('editor').innerHTML;
+        }
+
+        function resaltarTexto() {
+            document.execCommand('hiliteColor', false, 'yellow');
+        }
+
+        function validateForm() {
+            // Actualiza el campo oculto con el contenido del editor
+            updateContenidoInput();
+
+            var titulo = document.getElementById('titulo').value.trim();
+            var contenido = document.getElementById('contenidoInput').value.trim();
+            var etiqueta = document.getElementById('etiqueta').value.trim();
+            var categoria = document.getElementById('categoria').value.trim();
+            var visibilidad = document.getElementById('visibilidad').value;
+
+            if (titulo === '' || contenido === '' || etiqueta === '' || categoria === '') {
+                alert('Por favor, complete todos los campos antes de enviar.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function execCommand(command) {
+            document.execCommand(command, false, null);
+        }
+
+        function changeFontSize(action) {
+            var fontSize = window.getComputedStyle(document.getElementById('editor')).fontSize;
+            fontSize = parseInt(fontSize);
+
+            if (action === 'increase') {
+                fontSize += 2;
+            } else if (action === 'decrease' && fontSize > 2) {
+                fontSize -= 2;
+            }
+
+            document.getElementById('editor').style.fontSize = fontSize + 'px';
+        }
+
+        function insertEmoji(emoji) {
+            if (emoji !== '') {
+                document.getElementById('editor').focus();
+                document.execCommand('insertText', false, emoji);
+                document.getElementById('emojiDropdown').selectedIndex = 0;
+            }
+        }
+
+
+        // Función para obtener la fecha actual y mostrarla en el label
+        function cargarFechaActual() {
+            const fechaActual = new Date();
+            const dia = String(fechaActual.getDate()).padStart(2, '0');
+            const mes = String(fechaActual.getMonth() + 1).padStart(2, '0'); // Los meses empiezan en 0
+            const anio = fechaActual.getFullYear();
+            const fechaFormateada = `${dia}/${mes}/${anio}`;
+
+            document.getElementById('fechaLabel').textContent = fechaFormateada;
+        }
+
+
+        // Cargar la fecha cuando la página haya cargado completamente
+        window.onload = cargarFechaActual;
+        //invisible el texto
+        document.getElementById('editor').addEventListener('focus', function () {
+            var defaultText = document.querySelector('.default-text');
+            if (defaultText) {
+                defaultText.parentNode.removeChild(defaultText);
+            }
+        });
+        //cambia el tipo de letra
+        document.getElementById('font-dropdown').addEventListener('change', function () {
+            var fontFamily = this.value;
+            document.getElementById('editor').style.fontFamily = fontFamily;
+        });
+
+    </script>
+</body>
+
+</html>

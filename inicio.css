@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('fondo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+
+/* Estilo para la barra de navegación */
+.navbar {
+    background-color: rgba(51, 51, 51, 0.8);
+    /* Color de fondo del navbar con transparencia */
+    color: #fff;
+    /* Color del texto del navbar */
+    padding: 10px 20px;
+    /* Espaciado interno del navbar */
+    display: flex;
+    /* Utiliza flexbox para alinear elementos */
+    justify-content: space-between;
+    /* Alinea los elementos en los extremos */
+    align-items: center;
+    /* Alinea verticalmente los elementos */
+}
+
+.navbar-brand {
+    font-size: 24px;
+    /* Tamaño de fuente del nombre de la marca */
+    margin: 0;
+    /* Elimina el margen predeterminado */
+}
+
+.navbar-buttons a {
+    color: #fff;
+    /* Color del texto de los botones */
+    text-decoration: none;
+    /* Elimina el subrayado del texto */
+}
+
+/* Estilo para los párrafos */
+p {
+    text-align: center;
+    /* Alinea el texto al centro */
+}
+
+/* Estilo para el enlace de crear un blog */
+.crear-blog-link {
+    display: inline-block;
+    /* Muestra el enlace como bloque */
+    padding: 10px 20px;
+    /* Espaciado interno */
+    font-size: 18px;
+    /* Tamaño de fuente */
+    text-decoration: none;
+    /* Elimina el subrayado */
+    color: #fff;
+    /* Color del texto */
+    background-color: #1a2537;
+    /* Color de fondo */
+    border-radius: 5px;
+    /* Bordes curvos */
+    margin-top: 20px;
+    /* Espacio superior */
+}
+
+/* Estilo para la imagen */
+.imagen-container {
+    text-align: center;
+    /* Alinea el contenido al centro */
+    margin-top: 20px;
+    /* Espacio superior */
+}
+
+/* Estilo para los párrafos */
+p {
+    text-align: center;
+    /* Alinea el texto al centro */
+    font-size: 24px;
+    /* Cambia el tamaño de la fuente según tus preferencias */
+    /* Ajusta otros estilos según sea necesario */
+}

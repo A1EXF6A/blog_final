@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Blog AsH</title>
+    <link rel="stylesheet" href="../styles1.css">
+    <link rel="stylesheet" href="../perfil.css">
+    <style>
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .post-item .post-link {
+            display: block;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+        .post-item .post-link:hover {
+            color: #555;
+        }
+
+        .post-item {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-title {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .post-author {
+            font-style: italic;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .post-date {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .dropdown1 {
+            position: absolute;
+            left: 10px;
+        }
+
+
+
+        h1 {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="dropdown1">
+            <button class="button1">Menú</button>
+            <div class="dropdown-content1">
+                <a href="../interface/lectura_invitado.html">LECTURA</a>
+                <a href="../queries/logout.php">SALIR</a>
+            </div>
+        </div>
+        <h1>My Blog AsH</h1>
+    </header>
+    <main>
+        <section id="post-list">
+
+            <div id="loading-indicator">Cargando...</div>
+            <div id="posts-container"></div>
+            <div class="pagination" id="pagination-container"></div>
+        </section>
+    </main>
+    <script>
+        let allPosts = [];
+        let filteredPosts = [];
+        let currentPage = 1;
+        const postsPerPage = 5;
+
+        async function fetchPosts() {
+            try {
+                document.getElementById('loading-indicator').style.display = 'block';
+                const response = await fetch('../queries/publicos.php');
+                const text = await response.text();
+                console.log("Raw response:", text); // Ver el texto crudo de la respuesta
+                const posts = JSON.parse(text);
+                console.log("Fetched posts:", posts);
+
+                if (posts.error) {
+                    console.error('Database error:', posts.error);
+                    return;
+                }
+
+                allPosts = posts;
+                filteredPosts = allPosts;
+
+                renderPosts(filteredPosts);
+                document.getElementById('loading-indicator').style.display = 'none';
+            } catch (error) {
+                console.error("Error fetching posts:", error);
+                document.getElementById('loading-indicator').style.display = 'none';
+            }
+        }
+
+        function renderPosts(posts) {
+            const postsContainer = document.getElementById('posts-container');
+            const start = (currentPage - 1) * postsPerPage;
+            const end = start + postsPerPage;
+            const postsToDisplay = posts.slice(start, end);
+
+            postsContainer.innerHTML = '';
+
+            if (postsToDisplay.length === 0) {
+                const noPostsMessage = document.createElement('div');
+                noPostsMessage.classList.add('no-posts');
+                noPostsMessage.textContent = 'No se encontraron posts.';
+                postsContainer.appendChild(noPostsMessage);
+            } else {
+                postsToDisplay.forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.classList.add('post-item');
+                    postElement.setAttribute('data-id', post.id);
+
+                    const postLink = document.createElement('a');
+                    postLink.href = `../interface/ver_post2.html?id=${post.id}`; // Enlace a ver_post2.html con el ID del post
+                    postLink.classList.add('post-link');
+
+                    postLink.innerHTML = `
+                        <div class="post-content">
+                            <h3 class="post-title">${post.titulo}</h3>
+                            <p>${post.contenido}</p>
+                            <div class="post-meta">
+                                <span class="post-date">${formatDate(post.fecha)}</span>
+                            </div>
+                        </div>
+                    `;
+
+                    postElement.appendChild(postLink);
+                    postsContainer.appendChild(postElement);
+                    console.log("Post added:", post);
+                });
+            }
+
+            renderPagination(posts);
+        }
+
+        function renderPagination(posts) {
+            const paginationContainer = document.getElementById('pagination-container');
+            const totalPages = Math.ceil(posts.length / postsPerPage);
+
+            paginationContainer.innerHTML = '';
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                if (i === currentPage) {
+                    pageButton.classList.add('active');
+                }
+                pageButton.addEventListener('click', () => {
+                    currentPage = i;
+                    renderPosts(filteredPosts);
+                });
+                paginationContainer.appendChild(pageButton);
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        fetchPosts();
+    </script>
+</body>
+
+</html>

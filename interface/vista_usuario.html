@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Blog AsH</title>
+  <link rel="stylesheet" href="../styles1.css">
+  <link rel="stylesheet" href="../perfil.css">
+  <style>
+    /* Eliminar el subrayado de todos los enlaces */
+    a {
+      text-decoration: none;
+      /* Elimina el subrayado */
+      color: inherit;
+      /* Hereda el color del texto original */
+    }
+
+    /* Estilo específico para los enlaces dentro de los post-item */
+    .post-item .post-link {
+      display: block;
+      /* Hace que el enlace ocupe todo el espacio del post */
+      color: #333;
+      /* Color de texto para los enlaces */
+      transition: color 0.3s ease;
+      /* Transición suave para el cambio de color */
+    }
+
+    .post-item .post-link:hover {
+      color: #555;
+      /* Color de texto cuando se pasa el mouse sobre el enlace */
+    }
+
+    .post-item {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .post-title {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+    }
+
+    .post-author {
+      font-style: italic;
+      color: #777;
+      margin-bottom: 10px;
+    }
+
+    .post-date {
+      color: #999;
+      font-size: 0.9rem;
+    }
+
+    /* Puedes añadir más estilos según tus necesidades */
+  </style>
+</head>
+
+<body>
+  <main>
+    <section id="post-list">
+      <div class="dropdown">
+        <button id="categoryButton" class="dropbtn">‣ CATEGORIAS</button>
+        <hr>
+        <div id="categoryDropdown" class="dropdown-content">
+          <!-- Las categorías y "Todos los post" se llenarán dinámicamente aquí -->
+        </div>
+      </div>
+      <div id="search-container">
+        <input type="text" id="searchInput" placeholder="Buscar posts...">
+      </div>
+      <div id="sort-container">
+        <label for="sortSelect">Ordenar por:</label>
+        <select id="sortSelect">
+          <option value="title">Título</option>
+        </select>
+      </div>
+      <div id="loading-indicator">Cargando...</div>
+      <div id="posts-container"></div>
+      <div class="pagination" id="pagination-container"></div>
+    </section>
+  </main>
+  <script>
+    let allPosts = [];
+    let filteredPosts = [];
+    let currentPage = 1;
+    const postsPerPage = 5;
+
+    async function fetchPosts() {
+      try {
+        document.getElementById('loading-indicator').style.display = 'block';
+        const response = await fetch('../queries/post_publico.php');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const posts = await response.json();
+
+        if (posts.error) {
+          console.error('Database error:', posts.error);
+          return;
+        }
+
+        allPosts = posts;
+        filteredPosts = allPosts;
+
+        renderPosts(filteredPosts);
+        renderCategories(); // Renderizar las categorías con sus respectivos conteos
+        document.getElementById('loading-indicator').style.display = 'none';
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+        document.getElementById('loading-indicator').style.display = 'none';
+      }
+    }
+
+    function renderCategories() {
+      const categoryDropdown = document.getElementById('categoryDropdown');
+      const categories = ['musica', 'comida', 'fitness', 'estudio', 'deportes', 'programacion', 'oratoria']; // Define las categorías
+
+      // Contar posts por categoría
+      const postCounts = countPostsByCategory(allPosts, categories);
+
+      categoryDropdown.innerHTML = ''; // Limpiar el contenido actual
+
+      // Crear elemento para "Todos los post"
+      const allPostsCount = allPosts.length;
+      const allPostsLink = document.createElement('a');
+      allPostsLink.href = `#`;
+      allPostsLink.setAttribute('data-category', 'all');
+      allPostsLink.textContent = `Todos los post (${allPostsCount})`;
+      allPostsLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        filterPosts('all');
+      });
+      categoryDropdown.appendChild(allPostsLink);
+
+      // Crear elementos de categoría y añadirlos al menú desplegable
+      categories.forEach(category => {
+        const count = postCounts[category] || 0; // Obtener el conteo de posts para la categoría actual
+        const categoryLink = document.createElement('a');
+        categoryLink.href = `#`;
+        categoryLink.setAttribute('data-category', category);
+        categoryLink.textContent = `${category.charAt(0).toUpperCase() + category.slice(1)} (${count})`; // Formato: Nombre de categoría (conteo)
+        categoryLink.addEventListener('click', (event) => {
+          event.preventDefault();
+          filterPosts(category);
+        });
+        categoryDropdown.appendChild(categoryLink);
+      });
+    }
+
+    function countPostsByCategory(posts, categories) {
+      const counts = {};
+
+      categories.forEach(category => {
+        counts[category] = posts.filter(post => post.categoria.toLowerCase() === category).length;
+      });
+
+      return counts;
+    }
+
+    function renderPosts(posts) {
+      const postsContainer = document.getElementById('posts-container');
+      const start = (currentPage - 1) * postsPerPage;
+      const end = start + postsPerPage;
+      const postsToDisplay = posts.slice(start, end);
+
+      postsContainer.innerHTML = '';
+
+      if (postsToDisplay.length === 0) {
+        const noPostsMessage = document.createElement('div');
+        noPostsMessage.classList.add('no-posts');
+        noPostsMessage.textContent = 'No se encontraron posts para esta categoría.';
+        postsContainer.appendChild(noPostsMessage);
+      } else {
+        postsToDisplay.forEach(post => {
+          const postElement = document.createElement('div');
+          postElement.classList.add('post-item');
+          postElement.setAttribute('data-id', post.id);
+          postElement.setAttribute('data-category', post.categoria);
+
+          // Crear un enlace alrededor de todo el contenido del post
+          const postLink = document.createElement('a');
+          postLink.href = `../interface/ver_post.html?id=${post.id}`; // Ajustar la URL según tu estructura
+          postLink.classList.add('post-link');
+
+          // Contenido del post: título, contenido, autor y fecha
+          postLink.innerHTML = `
+                <div class="post-content">
+                    <h3 class="post-title">${post.titulo}</h3>
+                    <p>${post.contenido}</p>
+                    <div class="post-meta">
+                        <span class="post-date">${formatDate(post.fecha)}</span>
+                    </div>
+                </div>
+            `;
+
+          postElement.appendChild(postLink);
+          postsContainer.appendChild(postElement);
+          console.log("Post added:", post);
+        });
+      }
+
+      renderPagination(posts);
+    }
+
+
+    function renderPagination(posts) {
+      const paginationContainer = document.getElementById('pagination-container');
+      const totalPages = Math.ceil(posts.length / postsPerPage);
+
+      paginationContainer.innerHTML = '';
+
+      for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        if (i === currentPage) {
+          pageButton.classList.add('active');
+        }
+        pageButton.addEventListener('click', () => {
+          currentPage = i;
+          renderPosts(filteredPosts);
+        });
+        paginationContainer.appendChild(pageButton);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await fetchPosts();
+
+      const searchInput = document.getElementById('searchInput');
+      searchInput.addEventListener('input', (event) => {
+        const searchTerm = event.target.value.trim().toLowerCase();
+        if (searchTerm === '') {
+          filteredPosts = allPosts;
+        } else {
+          filteredPosts = allPosts.filter(post => post.titulo.toLowerCase().includes(searchTerm));
+        }
+        currentPage = 1;
+        renderPosts(filteredPosts);
+      });
+
+      const sortSelect = document.getElementById('sortSelect');
+      sortSelect.addEventListener('change', (event) => {
+        const sortCriteria = event.target.value;
+        if (sortCriteria === 'title') {
+          filteredPosts.sort((a, b) => a.titulo.localeCompare(b.titulo));
+        }
+        renderPosts(filteredPosts);
+      });
+
+      const response = await fetch('../queries/perfil_usuario.php');
+      const result = await response.json();
+      if (result.username) {
+        document.getElementById('mostrarUsuario').textContent = result.username;
+      } else {
+        console.error('Error:', result.error);
+      }
+    });
+
+    function filterPosts(category) {
+      if (category === 'all') {
+        filteredPosts = allPosts;
+      } else {
+        filteredPosts = allPosts.filter(post => post.categoria.toLowerCase() === category.toLowerCase());
+      }
+      currentPage = 1;
+      renderPosts(filteredPosts);
+    }
+
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const date = new Date(dateString);
+      return date.toLocaleDateString('es-ES', options);
+    }
+  </script>
+</body>
+
+</html>

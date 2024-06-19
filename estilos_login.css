@@ -1,0 +1,206 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('fondo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #111111;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.contenedor {
+    width: 100%;
+    padding: 15px;
+}
+
+.formulario {
+    background: rgba(255, 255, 255, 0.4);
+    margin-top: 150px;
+    padding: 20px;
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+    /* Agrega estas propiedades para centrar el formulario */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    /* Ajusta el ancho del formulario */
+    max-width: 500px;
+    /* Define un ancho máximo */
+}
+
+h1 {
+    text-align: center;
+    color: #1a2537;
+    font-size: 40px;
+}
+
+input[type="text"],
+input[type="password"] {
+    font-size: 20px;
+    width: 100%;
+    /* Hace que los campos de entrada ocupen todo el ancho */
+    padding: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.4);
+    margin-bottom: 15px;
+    /* Agrega un espacio entre los campos */
+}
+
+.input-contenedor {
+    position: relative;
+    /* Establece la posición relativa para poder posicionar el icono */
+}
+
+.input-contenedor i {
+    position: absolute;
+    /* Establece la posición absoluta */
+    top: 50%;
+    /* Alinea el icono verticalmente al centro */
+    transform: translateY(-50%);
+    /* Ajusta la posición vertical del icono */
+    left: 10px;
+    /* Alinea el icono a la izquierda del input */
+    color: #131313;
+    /* Color del icono */
+}
+
+/* Agrega margen izquierdo al texto */
+.input-contenedor input[type="text"],
+.input-contenedor input[type="password"] {
+    padding-left: 30px;
+    /* Espacio a la izquierda del texto para el icono */
+}
+
+
+.button {
+    border: none;
+    width: 100%;
+    color: white;
+    font-size: 20px;
+    background: #1a2537;
+    padding: 15px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+    /* Ajusta el espacio entre el botón y los campos de entrada */
+}
+
+.button:hover {
+    background: cadetblue;
+}
+
+p {
+    text-align: center;
+}
+
+.link {
+    text-decoration: none;
+    color: #1a2537;
+    font-weight: 600;
+}
+
+.link:hover {
+    color: cadetblue;
+}
+
+@media screen and (max-width: 768px) {
+    .formulario {
+        width: 90%;
+        /* Redefine el ancho del formulario para dispositivos móviles */
+    }
+}
+
+.botones-intereses {
+    display: flex;
+    flex-wrap: wrap;
+    /* Para que los botones se ajusten automáticamente al ancho del contenedor */
+}
+
+.botones-intereses label {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: #f5f5f5;
+    cursor: pointer;
+}
+
+.botones-intereses input[type="checkbox"] {
+    display: none;
+}
+
+.botones-intereses input[type="checkbox"]+label {
+    color: #1a2537;
+}
+
+.botones-intereses input[type="checkbox"]:checked+label {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.navbar {
+    background-color: rgba(51, 51, 51, 0.8);
+    /* Color de fondo del navbar con transparencia */
+    color: #fff;
+    /* Color del texto del navbar */
+    padding: 10px 20px;
+    /* Espaciado interno del navbar */
+    display: flex;
+    /* Utiliza flexbox para alinear elementos */
+    justify-content: space-between;
+    /* Alinea los elementos en los extremos */
+    align-items: center;
+    /* Alinea verticalmente los elementos */
+}
+
+.navbar-brand {
+    font-size: 24px;
+    /* Tamaño de fuente del nombre de la marca */
+    margin: 0;
+    /* Elimina el margen predeterminado */
+}
+
+.navbar-buttons {
+    display: flex;
+    /* Utiliza flexbox para alinear elementos */
+    align-items: center;
+    /* Alinea verticalmente los elementos */
+}
+
+.navbar-buttons a {
+    color: #fff;
+    /* Color del texto de los botones */
+    text-decoration: none;
+    /* Elimina el subrayado del texto */
+    margin-left: 20px;
+    /* Espacio entre los botones */
+}
+
+.button {
+    background-color: #1a2537;
+    /* Color de fondo del botón */
+    border: none;
+    /* Sin borde */
+    color: white;
+    /* Color del texto del botón */
+    padding: 10px 20px;
+    /* Espaciado interno del botón */
+    font-size: 16px;
+    /* Tamaño de fuente del botón */
+    cursor: pointer;
+    /* Cambia el cursor al pasar sobre el botón */
+    border-radius: 5px;
+    /* Bordes curvos del botón */
+}
+
+.button:hover {
+    background-color: cadetblue;
+    /* Color de fondo del botón al pasar el ratón */
+}
